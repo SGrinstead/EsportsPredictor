@@ -19,7 +19,7 @@ namespace EsportsPredictor.Services
 
         public async Task<List<Tournament>> GetUpcomingTournamentsAsync()
         {
-            string url = "/csgo/tournaments/upcoming";
+            string url = "/tournaments/upcoming";
             var result = new List<Tournament>();
             var response = await client.GetAsync(url);
 
@@ -33,5 +33,22 @@ namespace EsportsPredictor.Services
 
             return result;
         }
+
+        public async Task<Team> GetTeamAsync(string teamSlug)
+        {
+            string url = $"/teams/{teamSlug}";
+            var result = new Team();
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stringResponse = await response.Content.ReadAsStringAsync();
+                result = JsonSerializer.Deserialize<Team>(stringResponse,
+                    new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            }
+            else throw new HttpRequestException(response.ReasonPhrase);
+
+            return result;
+        } 
     }
 }
