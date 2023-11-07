@@ -49,6 +49,23 @@ namespace EsportsPredictor.Services
             else throw new HttpRequestException(response.ReasonPhrase);
 
             return result;
-        } 
+        }
+
+        public async Task<Player> GetPlayerAsync(string playerSlug)
+        {
+            string url = $"/players/{playerSlug}";
+            var result = new Player();
+            var response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stringResponse = await response.Content.ReadAsStringAsync();
+                result = JsonSerializer.Deserialize<Player>(stringResponse,
+                    new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+            }
+            else throw new HttpRequestException(response.ReasonPhrase);
+
+            return result;
+        }
     }
 }
