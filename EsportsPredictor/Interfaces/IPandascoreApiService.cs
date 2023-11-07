@@ -4,6 +4,6 @@ namespace EsportsPredictor.Interfaces
 {
     public interface IPandascoreApiService
     {
-        Task<List<Tournament>> GetTournamentsAsync();
+        Task<List<Tournament>> GetUpcomingTournamentsAsync();
     }
 }

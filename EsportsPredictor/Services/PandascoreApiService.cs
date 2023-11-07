@@ -17,7 +17,7 @@ namespace EsportsPredictor.Services
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _config["PandascoreToken"]);
         }
 
-        public async Task<List<Tournament>> GetTournamentsAsync()
+        public async Task<List<Tournament>> GetUpcomingTournamentsAsync()
         {
             string url = "/csgo/tournaments/upcoming";
             var result = new List<Tournament>();
