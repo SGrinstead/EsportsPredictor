@@ -1,7 +1,11 @@
+using EsportsPredictor.Interfaces;
+using EsportsPredictor.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IPandascoreApiService, PandascoreApiService>();
 
 var app = builder.Build();
 
