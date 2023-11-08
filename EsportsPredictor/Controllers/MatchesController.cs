@@ -20,5 +20,13 @@ namespace EsportsPredictor.Controllers
 
 			return View(matches);
 		}
+
+		[Route("/matches/{matchSlug}")]
+		public async Task<IActionResult> Show(string matchSlug)
+		{
+			Match match = await _pandascoreApiService.GetMatchAsync(matchSlug);
+
+			return View(match);
+		}
 	}
 }
