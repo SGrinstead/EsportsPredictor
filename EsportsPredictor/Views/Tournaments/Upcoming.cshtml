@@ -13,6 +13,7 @@ else
 			<th>Tournament</th>
 			<th>Start Date</th>
 			<th>End Date</th>
+			<th>Tier</th>
 		</tr>
 		@foreach(var t in Model)
 		{
@@ -20,6 +21,7 @@ else
 				<td>@t.League.Name @t.Name</td>
 				<td>@t.BeginAt</td>
 				<td>@t.EndAt</td>
+				<td>@t.Tier.ToUpper()</td>
 				<td><a href="/tournaments/@t.Slug/matches">View Matches</a></td>
 			</tr>
 		}
