@@ -7,5 +7,6 @@ namespace EsportsPredictor.Interfaces
         Task<List<Tournament>> GetUpcomingTournamentsAsync();
         Task<Team> GetTeamAsync(string teamSlug);
         Task<Player> GetPlayerAsync(string playerSlug);
+        Task<List<Match>> GetMatchesAsync(string tournamentSlug);
     }
 }

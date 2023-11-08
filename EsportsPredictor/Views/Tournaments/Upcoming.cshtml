@@ -17,10 +17,10 @@ else
 		@foreach(var t in Model)
 		{
 			<tr>
-				<td>@t.Name</td>
+				<td>@t.League.Name @t.Name</td>
 				<td>@t.BeginAt</td>
 				<td>@t.EndAt</td>
-				<td><a>View Matches</a></td>
+				<td><a href="/tournaments/@t.Slug/matches">View Matches</a></td>
 			</tr>	
 		}
 	</table>

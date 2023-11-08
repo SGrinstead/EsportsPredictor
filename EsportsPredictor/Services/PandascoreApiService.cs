@@ -34,6 +34,23 @@ namespace EsportsPredictor.Services
             return result;
         }
 
+        public async Task<List<Match>> GetMatchesAsync(string tournamentSlug)
+        {
+            string url = $"/tournaments/{tournamentSlug}/matches";
+            var result = new List<Match>();
+            var response = await client.GetAsync(url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stringResponse = await response.Content.ReadAsStringAsync();
+				result = JsonSerializer.Deserialize<List<Match>>(stringResponse,
+					new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+			}
+			else throw new HttpRequestException(response.ReasonPhrase);
+
+			return result;
+		}
+
         public async Task<Team> GetTeamAsync(string teamSlug)
         {
             string url = $"/teams/{teamSlug}";
