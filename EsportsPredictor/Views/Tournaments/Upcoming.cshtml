@@ -19,8 +19,8 @@ else
 		{
 			<tr>
 				<td>@t.League.Name @t.Name</td>
-				<td>@t.BeginAt</td>
-				<td>@t.EndAt</td>
+				<td>@t.GetLocalBeginAtString()</td>
+				<td>@t.GetLocalEndAtString()</td>
 				<td>@t.Tier.ToUpper()</td>
 				<td><a href="/tournaments/@t.Slug/matches">View Matches</a></td>
 			</tr>
