@@ -1,0 +1,32 @@
+﻿@model List<Match>
+
+<h1>Matches</h1>
+
+@if (Model.Count == 0)
+{
+	<p>No matches found</p>
+}
+else
+{
+	<table>
+		<tr>
+			<th>Match</th>
+			<th>Start Date</th>
+			<th>Type</th>
+			<th>Status</th>
+		</tr>
+		@foreach (var match in Model)
+		{
+			<tr>
+				<td>@match.Name</td>
+				<td>@match.GetLocalBeginAtString()</td>
+				<td>@match.MatchType</td>
+				<td>@match.Status</td>
+				@if (!match.Name.Contains("TBD vs TBD"))
+				{
+					<td><a href="/matches/@match.Slug">Match Details</a></td>
+				}
+			</tr>
+		}
+	</table>
+}
