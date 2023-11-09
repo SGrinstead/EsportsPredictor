@@ -1,0 +1,12 @@
+﻿@model Player
+
+<h1>@Model.First_name "@Model.Name" @Model.Last_name</h1>
+<img src="@Model.Image_url" alt="Picture of @Model.Name"/>
+
+<h6>Nationality: @Model.Nationality</h6>
+<p>Currently plays @Model.Current_videogame.Name for <a href="/teams/@Model.Current_team.Slug">@Model.Current_team.Name</a></p>
+
+@if(Model.Role is not null)
+{
+	<h6>Role: @Model.Role</h6>
+}
