@@ -7,6 +7,7 @@
         public string Acronym { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public Uri ImageUrl { get; set; }
+        public Uri Image_url { get; set; }
+        public List<Player> Players { get; set; } = new List<Player>();
     }
 }
