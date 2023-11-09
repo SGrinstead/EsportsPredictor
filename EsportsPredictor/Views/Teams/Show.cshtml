@@ -1,0 +1,20 @@
+﻿@model Team
+
+<h1>@Model.Name (@Model.Acronym)</h1>
+<img src="@Model.Image_url" alt="@Model.Name Logo"/>
+<h6>Location: @Model.Location</h6>
+
+<h3>Players</h3>
+@if (Model.Players.Count == 0)
+{
+	<p>No players found</p>
+}
+else
+{
+	<ul>
+	@foreach(var player in Model.Players)
+	{
+		<li><a href="/players/@player.Slug">@player.Name</a></li>
+	}
+	</ul>
+}

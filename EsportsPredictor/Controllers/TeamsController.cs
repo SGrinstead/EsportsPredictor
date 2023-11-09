@@ -15,7 +15,7 @@ namespace EsportsPredictor.Controllers
 		[Route("/teams/{teamSlug}")]
         public async Task<IActionResult> Show(string teamSlug)
 		{
-			var team = _pandascoreApiService.GetTeamAsync(teamSlug);
+			var team = await _pandascoreApiService.GetTeamAsync(teamSlug);
 
 			return View(team);
 		}
