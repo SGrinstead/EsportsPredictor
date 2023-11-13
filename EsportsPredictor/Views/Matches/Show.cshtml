@@ -7,6 +7,7 @@
 <h1>@Model.GetLocalBeginAtString()</h1>
 <h1>@Model.Name</h1>
 
+<!--This uses partial views to display information about the match based on if the opponents are Players or Teams-->
 @if(opponents is null)
 {
 	<h6>Error Retrieving Match Information</h6>

@@ -1,5 +1,6 @@
 ﻿@model TeamOpponents
 
+<!--standard team vs team case-->
 @if(Model.Opponents.Count == 2)
 {
 	Team team1 = Model.Opponents[0];
@@ -53,6 +54,7 @@ else
 {
 	foreach(var team in Model.Opponents)
 	{
+		<!--This case can happen if one team is TBD or there are more than 2 teams for some reason-->
 		<div class="text-center">
 			<h2>@team.Name (<a href="/teams/@team.Slug">@team.Acronym</a>)</h2>
 			<img src="@team.Image_url" alt="@team.Name Logo">
