@@ -1,0 +1,38 @@
+﻿@model PlayerOpponents
+
+@if (Model.Opponents.Count == 2)
+{
+	Player player1 = Model.Opponents[0];
+	Player player2 = Model.Opponents[1];
+
+	<div class="row text-center">
+		<div class="col-5">
+			<h2>@player1.Name (<a href="/teams/@player1.Current_team.Slug">@player1.Current_team.Acronym</a>)</h2>
+			<img src="@player1.Image_url" alt="Picture of @player1.Name">
+			<a href="/players/@player1.Slug">More about @player1.Name</a>
+		</div>
+		<div class="col-2">
+			<h1>Vs</h1>
+		</div>
+		<div class="col-5">
+			<h2>@player2.Name (<a href="/teams/@player2.Current_team.Slug">@player2.Current_team.Acronym</a>)</h2>
+			<img src="@player2.Image_url" alt="Picture of @player2.Name">
+			<a href="/players/@player2.Slug">More about @player2.Name</a>
+		</div>
+	</div>
+}
+else if (Model.Opponents.Count == 0)
+{
+	<h4>Player Data Not Available</h4>
+}
+else
+{
+	foreach (var player in Model.Opponents)
+	{
+		<div class="text-center">
+			<h2>@player.Name (<a href="/teams/@player.Current_team.Slug">@player.Current_team.Acronym</a>)</h2>
+			<img src="@player.Image_url" alt="Picture of @player.Name">
+			<a href="/players/@player.Slug">More about @player.Name</a>
+		</div>
+	}
+}

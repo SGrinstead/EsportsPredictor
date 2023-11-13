@@ -17,6 +17,23 @@ namespace EsportsPredictor.Services
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _config["PandascoreToken"]);
         }
 
+        public async Task<List<Videogame>> GetVideogamesAsync()
+        {
+			string url = "/videogames";
+			var result = new List<Videogame>();
+			var response = await client.GetAsync(url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stringResponse = await response.Content.ReadAsStringAsync();
+				result = JsonSerializer.Deserialize<List<Videogame>>(stringResponse,
+					new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+			}
+			else throw new HttpRequestException(response.ReasonPhrase);
+
+			return result;
+		}
+
         public async Task<List<Tournament>> GetUpcomingTournamentsAsync()
         {
             string url = "/tournaments/upcoming";
@@ -62,6 +79,31 @@ namespace EsportsPredictor.Services
 				var stringResponse = await response.Content.ReadAsStringAsync();
 				result = JsonSerializer.Deserialize<Match>(stringResponse,
 					new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+			}
+			else throw new HttpRequestException(response.ReasonPhrase);
+
+			return result;
+		}
+
+        public async Task<IOpponents> GetOpponentsAsync(string matchSlug)
+        {
+            string url = $"/matches/{matchSlug}/opponents";
+            IOpponents result = null;
+            var response = await client.GetAsync(url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stringResponse = await response.Content.ReadAsStringAsync();
+                if(stringResponse.Contains("\"opponent_type\":\"Team\""))
+                {
+					result = JsonSerializer.Deserialize<TeamOpponents>(stringResponse,
+						new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+				}
+				else if(stringResponse.Contains("\"opponent_type\":\"Player\""))
+                {
+					result = JsonSerializer.Deserialize<PlayerOpponents>(stringResponse,
+						new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+				}
 			}
 			else throw new HttpRequestException(response.ReasonPhrase);
 
