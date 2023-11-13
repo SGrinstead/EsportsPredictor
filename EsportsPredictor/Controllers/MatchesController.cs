@@ -25,6 +25,7 @@ namespace EsportsPredictor.Controllers
 		public async Task<IActionResult> Show(string matchSlug)
 		{
 			Match match = await _pandascoreApiService.GetMatchAsync(matchSlug);
+			ViewData["Opponents"] = await _pandascoreApiService.GetOpponentsAsync(matchSlug);
 
 			return View(match);
 		}

@@ -1,13 +1,47 @@
-﻿
+﻿@model TeamOpponents
 
-<div class="row">
-	<div class="col-5">
-		<h2>Team 1</h2>
+@if(Model.Opponents.Count == 2)
+{
+	Team team1 = Model.Opponents[0];
+	Team team2 = Model.Opponents[1];
+	
+	<div class="row">
+		<div class="col-5">
+			<h2>@team1.Name (@team1.Acronym)</h2>
+			<img src="@team1.Image_url" alt="@team1.Name Logo">
+			<h4>Players</h4>
+			<ul>
+			@foreach(var player in team1.Players)
+			{
+				<li>
+					@if(player.Role is not null)
+					{
+						<p>@player.Role: </p>
+					}
+					<a href="/players/@player.Slug">@player.Name</a>
+				</li>
+			}
+			</ul>
+		</div>
+		<div class="col-2">
+			<h1>Vs</h1>
+		</div>
+		<div class="col-5">
+			<h2>@team2.Name (@team2.Acronym)</h2>
+			<img src="@team2.Image_url" alt="@team2.Name Logo">
+			<h4>Players</h4>
+			<ul>
+				@foreach (var player in team2.Players)
+				{
+					<li>
+						@if (player.Role is not null)
+						{
+							<p>@player.Role: </p>
+						}
+						<a href="/players/@player.Slug">@player.Name</a>
+					</li>
+				}
+			</ul>
+		</div>
 	</div>
-	<div class="col-2">
-		<h1>Vs</h1>
-	</div>
-	<div class="col-5">
-		<h2>Team 2</h2>
-	</div>
-</div>
+}

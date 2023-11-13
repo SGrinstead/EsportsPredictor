@@ -1,6 +1,25 @@
-﻿@model Match
+﻿@using EsportsPredictor.Interfaces
+@model Match
+@{
+	var opponents = ViewData["Opponents"] as IOpponents;
+}
 
 <h1>@Model.GetLocalBeginAtString()</h1>
 <h1>@Model.Name</h1>
 
-@await Html.PartialAsync("_TeamVsPartial")
+@if(opponents is null)
+{
+	<h6>Detailed Match Information Not Available</h6>
+}
+else if (opponents.Opponent_type == "Team")
+{
+	@await Html.PartialAsync("_TeamVsPartial", opponents)
+}
+else if(opponents.Opponent_type == "Player")
+{
+	@await Html.PartialAsync("_PlayerVsPartial", opponents)
+}
+else
+{
+	<h6>Detailed Match Information Not Available</h6>
+}
