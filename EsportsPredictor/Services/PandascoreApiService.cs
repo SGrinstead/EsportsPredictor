@@ -17,6 +17,23 @@ namespace EsportsPredictor.Services
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _config["PandascoreToken"]);
         }
 
+        public async Task<List<Videogame>> GetVideogamesAsync()
+        {
+			string url = "/videogames";
+			var result = new List<Videogame>();
+			var response = await client.GetAsync(url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stringResponse = await response.Content.ReadAsStringAsync();
+				result = JsonSerializer.Deserialize<List<Videogame>>(stringResponse,
+					new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+			}
+			else throw new HttpRequestException(response.ReasonPhrase);
+
+			return result;
+		}
+
         public async Task<List<Tournament>> GetUpcomingTournamentsAsync()
         {
             string url = "/tournaments/upcoming";
