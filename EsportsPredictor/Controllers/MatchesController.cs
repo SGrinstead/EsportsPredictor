@@ -26,6 +26,7 @@ namespace EsportsPredictor.Controllers
 		{
 			Match match = await _pandascoreApiService.GetMatchAsync(matchSlug);
 			ViewData["Opponents"] = await _pandascoreApiService.GetOpponentsAsync(matchSlug);
+			Response.Cookies.Append("RecentlyViewedMatch", matchSlug);
 
 			return View(match);
 		}

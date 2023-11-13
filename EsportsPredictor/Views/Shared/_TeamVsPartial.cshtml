@@ -7,7 +7,7 @@
 	
 	<div class="row text-center">
 		<div class="col-5">
-			<h2>@team1.Name (@team1.Acronym)</h2>
+			<h2>@team1.Name (<a href="/teams/@team1.Slug">@team1.Acronym</a>)</h2>
 			<img src="@team1.Image_url" alt="@team1.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
@@ -27,7 +27,7 @@
 			<h1>Vs</h1>
 		</div>
 		<div class="col-5">
-			<h2>@team2.Name (@team2.Acronym)</h2>
+			<h2>@team2.Name (<a href="/teams/@team2.Slug">@team2.Acronym</a>)</h2>
 			<img src="@team2.Image_url" alt="@team2.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
@@ -54,7 +54,7 @@ else
 	foreach(var team in Model.Opponents)
 	{
 		<div class="text-center">
-			<h2>@team.Name (@team.Acronym)</h2>
+			<h2>@team.Name (<a href="/teams/@team.Slug">@team.Acronym</a>)</h2>
 			<img src="@team.Image_url" alt="@team.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
