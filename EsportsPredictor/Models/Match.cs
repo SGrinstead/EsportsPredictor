@@ -10,7 +10,7 @@
         public string Match_type { get; set; }
         public string Status { get; set; }
         public string Winner_type { get; set; }
-        public int Winner_id { get; set; }
+        public int? Winner_id { get; set; }
 
 		public string GetLocalBeginAtString()
 		{
