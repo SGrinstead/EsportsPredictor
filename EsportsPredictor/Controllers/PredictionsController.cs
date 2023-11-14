@@ -24,6 +24,14 @@ namespace EsportsPredictor.Controllers
 			return View(predictions);
 		}
 
+		[Route("/predictions/new/{matchSlug}")]
+		public IActionResult New(string matchSlug)
+		{
+			var match = _pandascoreApiService.GetMatchAsync(matchSlug);
+
+			return View(match);
+		}
+
 		private async void CheckPredictions(List<Prediction> predictions)
 		{
 			foreach(var prediction in predictions)
