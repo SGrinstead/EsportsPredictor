@@ -16,6 +16,15 @@
 			<td>@prediction.Match.Name</td>
 			<td>@prediction.Match.GetLocalBeginAtString()</td>
 			<td>@prediction.Match.Status</td>
+			<td><a href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
+			@if(prediction.ActualWinner is null)
+			{
+				<td>Undetermined</td>
+			}
+			else
+			{
+				<td><a href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
+			}
 			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
 		</tr>
 	}
