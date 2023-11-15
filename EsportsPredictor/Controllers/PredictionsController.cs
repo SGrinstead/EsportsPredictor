@@ -17,15 +17,9 @@ namespace EsportsPredictor.Controllers
 			_context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
 		{
-			var predictions = _context.Predictions
-				.Include(p => p.Match)
-				.Include(p => p.PredictedWinner)
-				.Include(p => p.ActualWinner)
-				.ToList();
-			
-			CheckPredictions(predictions);
+			var predictions = await GetUpdatedPredictions();
 
 			return View(predictions);
 		}
@@ -53,25 +47,48 @@ namespace EsportsPredictor.Controllers
 			return Redirect("/predictions");
 		}
 
-		private async void CheckPredictions(List<Prediction> predictions)
+		//[HttpPost]
+		//[Route("/predictions/delete/{predictionId:int}")]
+		//public IActionResult Delete(int predictionId)
+		//{
+		//	var predictionToDelete = _context.Predictions
+		//		.Where(p => p.Id == predictionId)
+		//		.Include(p => p.PredictedWinner)
+		//		.Include(p => p.ActualWinner)
+		//		.First();
+
+		//	_context.Predictions.Remove(predictionToDelete);
+		//	_context.SaveChanges();
+
+		//	return Redirect("/predictions");
+		//}
+
+		private async Task<List<Prediction>> GetUpdatedPredictions()
 		{
-			foreach(var prediction in predictions)
+			List<Prediction> predictions = _context.Predictions.AsNoTracking()
+				.Include(p => p.Match)
+				.Include(p => p.PredictedWinner)
+				.Include(p => p.ActualWinner)
+				.ToList();
+
+			foreach (var prediction in predictions)
 			{
 				if (!prediction.IsCompleted)
 				{
 					if(DateTime.UtcNow > prediction.Match.Begin_at)
 					{
 						prediction.Match = await _pandascoreApiService.GetMatchAsync(prediction.Match.Slug);
-
+						_context.Predictions.Update(prediction);
+				
 						if(prediction.Match.Status == "finished")
 						{
 							prediction.IsCompleted = true;
 						}
+						_context.SaveChanges();
 					}
-					_context.Predictions.Update(prediction);
 				}
 			}
-			_context.SaveChanges();
+			return predictions;
 		}
 	}
 }
