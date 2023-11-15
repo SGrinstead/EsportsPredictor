@@ -143,5 +143,24 @@ namespace EsportsPredictor.Services
 
             return result;
         }
+
+        public async Task<Winner> GetWinnerAsync(int winnerId)
+        {
+			string url = $"/teams/{winnerId}";
+			var result = new Team();
+			var response = await client.GetAsync(url);
+            Winner winner;
+
+			if (response.IsSuccessStatusCode)
+			{
+				var stringResponse = await response.Content.ReadAsStringAsync();
+				result = JsonSerializer.Deserialize<Team>(stringResponse,
+					new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+				winner = new Winner(result);
+			}
+			else throw new HttpRequestException(response.ReasonPhrase);
+
+			return winner;
+		}
     }
 }

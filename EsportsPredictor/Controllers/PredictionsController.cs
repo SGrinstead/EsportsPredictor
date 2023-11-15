@@ -19,7 +19,12 @@ namespace EsportsPredictor.Controllers
 
         public async Task<IActionResult> Index()
 		{
-			var predictions = await GetUpdatedPredictions();
+			await UpdatePredictions();
+			var predictions = _context.Predictions
+				.Include(p => p.Match)
+				.Include(p => p.PredictedWinner)
+				.Include(p => p.ActualWinner)
+				.ToList();
 
 			return View(predictions);
 		}
@@ -35,10 +40,27 @@ namespace EsportsPredictor.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(string winnerSlug, string matchSlug)
 		{
-			Match match = await _pandascoreApiService.GetMatchAsync(matchSlug);
-			Team team = await _pandascoreApiService.GetTeamAsync(winnerSlug);
+			Match match;
+			Winner predictedWinner;
+
+			if (_context.Matches.Any(m => m.Slug == matchSlug))
+			{
+				match = _context.Matches.Where(m => m.Slug == matchSlug).First();
+			}
+			else
+			{
+				match = await _pandascoreApiService.GetMatchAsync(matchSlug);
+			}
+
+			if (_context.Winners.Any(w => w.Slug == winnerSlug))
+			{
+				predictedWinner = _context.Winners.Where(w => w.Slug == winnerSlug).First();
+			}
+			else
+			{
+				predictedWinner = new Winner(await _pandascoreApiService.GetTeamAsync(winnerSlug));
+			}
 			
-			Winner predictedWinner = new Winner(team);
 			Prediction prediction = new Prediction { IsCompleted = false, Match = match, PredictedWinner = predictedWinner };
 
 			_context.Predictions.Add(prediction);
@@ -47,25 +69,25 @@ namespace EsportsPredictor.Controllers
 			return Redirect("/predictions");
 		}
 
-		//[HttpPost]
-		//[Route("/predictions/delete/{predictionId:int}")]
-		//public IActionResult Delete(int predictionId)
-		//{
-		//	var predictionToDelete = _context.Predictions
-		//		.Where(p => p.Id == predictionId)
-		//		.Include(p => p.PredictedWinner)
-		//		.Include(p => p.ActualWinner)
-		//		.First();
-
-		//	_context.Predictions.Remove(predictionToDelete);
-		//	_context.SaveChanges();
-
-		//	return Redirect("/predictions");
-		//}
-
-		private async Task<List<Prediction>> GetUpdatedPredictions()
+		[HttpPost]
+		[Route("/predictions/delete/{predictionId:int}")]
+		public IActionResult Delete(int predictionId)
 		{
-			List<Prediction> predictions = _context.Predictions.AsNoTracking()
+			var predictionToDelete = _context.Predictions
+				.Where(p => p.Id == predictionId)
+				.First();
+
+			_context.Predictions.Remove(predictionToDelete);
+			_context.SaveChanges();
+
+			return Redirect("/predictions");
+		}
+
+		private async Task UpdatePredictions()
+		{
+			await UpdateMatches();
+
+			List<Prediction> predictions = _context.Predictions
 				.Include(p => p.Match)
 				.Include(p => p.PredictedWinner)
 				.Include(p => p.ActualWinner)
@@ -75,20 +97,37 @@ namespace EsportsPredictor.Controllers
 			{
 				if (!prediction.IsCompleted)
 				{
-					if(DateTime.UtcNow > prediction.Match.Begin_at)
+					if (prediction.Match.Winner_id.HasValue)
 					{
-						prediction.Match = await _pandascoreApiService.GetMatchAsync(prediction.Match.Slug);
-						_context.Predictions.Update(prediction);
-				
-						if(prediction.Match.Status == "finished")
+						int winnerId = (int)prediction.Match.Winner_id;
+						if (_context.Winners.Any(w => w.Id == winnerId))
 						{
-							prediction.IsCompleted = true;
+							prediction.ActualWinner = _context.Winners.Find(winnerId);
 						}
-						_context.SaveChanges();
+						else
+						{
+							prediction.ActualWinner = await _pandascoreApiService.GetWinnerAsync(winnerId);
+						}
+						prediction.IsCompleted = true;
 					}
 				}
+				_context.Predictions.Update(prediction);
+				_context.SaveChanges();		
 			}
-			return predictions;
+		}
+
+		private async Task UpdateMatches()
+		{
+			var matches = _context.Matches.ToList();
+			foreach(var match in matches)
+			{
+				if(match.Status != "finished" && DateTime.UtcNow > match.Begin_at)
+				{
+					var updatedMatch = await _pandascoreApiService.GetMatchAsync(match.Slug);
+					_context.Matches.Update(updatedMatch);
+				}
+			}
+			_context.SaveChanges();
 		}
 	}
 }

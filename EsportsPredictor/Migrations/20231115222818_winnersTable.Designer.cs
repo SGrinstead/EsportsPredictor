@@ -3,6 +3,7 @@ using System;
 using EsportsPredictor.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EsportsPredictor.Migrations
 {
     [DbContext(typeof(EsportsPredictorContext))]
-    partial class EsportsPredictorContextModelSnapshot : ModelSnapshot
+    [Migration("20231115222818_winnersTable")]
+    partial class winnersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,9 +71,9 @@ namespace EsportsPredictor.Migrations
                         .HasColumnName("winner_type");
 
                     b.HasKey("Id")
-                        .HasName("pk_matches");
+                        .HasName("pk_match");
 
-                    b.ToTable("matches", (string)null);
+                    b.ToTable("match", (string)null);
                 });
 
             modelBuilder.Entity("EsportsPredictor.Models.Prediction", b =>
@@ -133,11 +135,6 @@ namespace EsportsPredictor.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("slug");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text")
@@ -161,7 +158,7 @@ namespace EsportsPredictor.Migrations
                         .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_predictions_matches_match_id");
+                        .HasConstraintName("fk_predictions_match_match_id");
 
                     b.HasOne("EsportsPredictor.Models.Winner", "PredictedWinner")
                         .WithMany()

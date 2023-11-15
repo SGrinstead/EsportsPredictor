@@ -26,7 +26,11 @@
 				<td><a href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
 			}
 			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
-			<td><a href="/predictions/delete/@prediction.Id">Delete</a></td>
+			<td>
+				<form method="post" action="/predictions/delete/@prediction.Id">
+					<button type="submit">Delete</button>
+				</form>
+			</td>
 		</tr>
 	}
 </table>
