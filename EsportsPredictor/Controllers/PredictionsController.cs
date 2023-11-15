@@ -2,6 +2,7 @@
 using EsportsPredictor.Interfaces;
 using EsportsPredictor.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EsportsPredictor.Controllers
 {
@@ -18,18 +19,38 @@ namespace EsportsPredictor.Controllers
 
         public IActionResult Index()
 		{
-			var predictions = _context.Predictions.ToList();
+			var predictions = _context.Predictions
+				.Include(p => p.Match)
+				.Include(p => p.PredictedWinner)
+				.Include(p => p.ActualWinner)
+				.ToList();
+			
 			CheckPredictions(predictions);
 
 			return View(predictions);
 		}
 
 		[Route("/predictions/new/{matchSlug}")]
-		public IActionResult New(string matchSlug)
+		public async Task<IActionResult> New(string matchSlug)
 		{
-			var match = _pandascoreApiService.GetMatchAsync(matchSlug);
+			ViewData["Opponents"] = await _pandascoreApiService.GetOpponentsAsync(matchSlug);
 
-			return View(match);
+			return View("New", matchSlug);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Create(string winnerSlug, string matchSlug)
+		{
+			Match match = await _pandascoreApiService.GetMatchAsync(matchSlug);
+			Team team = await _pandascoreApiService.GetTeamAsync(winnerSlug);
+			
+			Winner predictedWinner = new Winner(team);
+			Prediction prediction = new Prediction { IsCompleted = false, Match = match, PredictedWinner = predictedWinner };
+
+			_context.Predictions.Add(prediction);
+			_context.SaveChanges();
+
+			return Redirect("/predictions");
 		}
 
 		private async void CheckPredictions(List<Prediction> predictions)
