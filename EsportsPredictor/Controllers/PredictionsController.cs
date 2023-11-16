@@ -118,7 +118,7 @@ namespace EsportsPredictor.Controllers
 
 		private async Task UpdateMatches()
 		{
-			var matches = _context.Matches.ToList();
+			var matches = _context.Matches.AsNoTracking().ToList();
 			foreach(var match in matches)
 			{
 				if(match.Status != "finished" && DateTime.UtcNow > match.Begin_at)
