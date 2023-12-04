@@ -95,6 +95,10 @@ namespace EsportsPredictor.Controllers
 
 			foreach (var prediction in predictions)
 			{
+				if (prediction.Match.Winner_id is null)
+				{
+					prediction.IsCompleted = false;
+				}
 				if (!prediction.IsCompleted)
 				{
 					if (prediction.Match.Winner_id.HasValue)
@@ -106,7 +110,11 @@ namespace EsportsPredictor.Controllers
 						}
 						else
 						{
-							prediction.ActualWinner = await _pandascoreApiService.GetWinnerAsync(winnerId);
+							Winner newWinner = await _pandascoreApiService.GetWinnerAsync(winnerId);
+							_context.Winners.Add(newWinner);
+							_context.SaveChanges();
+
+							prediction.ActualWinner = _context.Winners.Find(newWinner.Id);
 						}
 						prediction.IsCompleted = true;
 					}
@@ -121,7 +129,7 @@ namespace EsportsPredictor.Controllers
 			var matches = _context.Matches.AsNoTracking().ToList();
 			foreach(var match in matches)
 			{
-				if(match.Status != "finished" && DateTime.UtcNow > match.Begin_at)
+				if(match.Winner_id is null && DateTime.UtcNow > match.Begin_at)
 				{
 					var updatedMatch = await _pandascoreApiService.GetMatchAsync(match.Slug);
 					_context.Matches.Update(updatedMatch);
