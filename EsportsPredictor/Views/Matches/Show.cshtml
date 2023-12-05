@@ -24,3 +24,13 @@ else
 {
 	<h6>Detailed Match Information Not Available</h6>
 }
+
+<!--Button to make a prediction if the game hasn't started-->
+@if(DateTime.UtcNow < Model.Begin_at)
+{
+	<div class="d-flex align-items-center justify-content-center">
+		<form method="get" action="/predictions/new/@Model.Slug">
+			<button type="submit">Make a Prediction</button>
+		</form>
+	</div>
+}

@@ -7,10 +7,10 @@
         public string Name { get; set; }
         public DateTime? Begin_at { get; set; }
         public DateTime? End_at { get; set; }
-        public string MatchType { get; set; }
+        public string Match_type { get; set; }
         public string Status { get; set; }
-        public string WinnerType { get; set; }
-        public int WinnerId { get; set; }
+        public string Winner_type { get; set; }
+        public int? Winner_id { get; set; }
 
 		public string GetLocalBeginAtString()
 		{

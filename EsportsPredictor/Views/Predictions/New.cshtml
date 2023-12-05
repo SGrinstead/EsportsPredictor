@@ -1,0 +1,24 @@
+﻿@model string
+@{
+	var opponents = ViewData["Opponents"] as TeamOpponents;
+}
+
+<h1>Make Your Prediction</h1>
+
+<form method="post" action="/predictions/create">
+	<label for="winner">Select the team you think will win: </label>
+
+	<select name="winnerSlug" id="winner">
+		@foreach(var opponent in opponents.Opponents)
+		{
+			<option value="@opponent.Slug">@opponent.Name</option>
+		}
+	</select>
+
+	<input type="hidden" id="matchSlug" name="matchSlug" value="@Model"/>
+
+	<button type="submit">Make Prediction</button>
+</form>
+
+@await Html.PartialAsync("_ReturnToMatchPartial")
+

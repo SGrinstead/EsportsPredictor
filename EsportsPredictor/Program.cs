@@ -1,11 +1,20 @@
 using EsportsPredictor.Interfaces;
 using EsportsPredictor.Services;
+using Microsoft.EntityFrameworkCore;
+using EsportsPredictor.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IPandascoreApiService, PandascoreApiService>();
+builder.Services.AddDbContext<EsportsPredictorContext>(
+    options => options.UseNpgsql(
+        builder.Configuration["DbConnectionString"]
+        ?? throw new InvalidOperationException("Database connection string not found")
+        )
+    .UseSnakeCaseNamingConvention()
+);
 
 var app = builder.Build();
 

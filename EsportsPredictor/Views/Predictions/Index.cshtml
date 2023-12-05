@@ -1,0 +1,36 @@
+﻿@model List<Prediction>
+
+<h1>Your Predictions</h1>
+
+<table>
+	<tr>
+		<th>Match</th>
+		<th>Date</th>
+		<th>Status</th>
+		<th>Your Prediction</th>
+		<th>Result</th>
+	</tr>
+	@foreach(var prediction in Model)
+	{
+		<tr>
+			<td>@prediction.Match.Name</td>
+			<td>@prediction.Match.GetLocalBeginAtString()</td>
+			<td>@prediction.Match.Status</td>
+			<td><a href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
+			@if(prediction.ActualWinner is null)
+			{
+				<td>Undetermined</td>
+			}
+			else
+			{
+				<td><a href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
+			}
+			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
+			<td>
+				<form method="post" action="/predictions/delete/@prediction.Id">
+					<button type="submit">Delete</button>
+				</form>
+			</td>
+		</tr>
+	}
+</table>
