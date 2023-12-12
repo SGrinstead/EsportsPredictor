@@ -1,32 +1,47 @@
 ﻿using EsportsPredictor.DataAccess;
 using EsportsPredictor.Interfaces;
 using EsportsPredictor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace EsportsPredictor.Controllers
 {
+	[Authorize]
 	public class PredictionsController : Controller
 	{
 		private readonly IPandascoreApiService _pandascoreApiService;
 		private readonly EsportsPredictorContext _context;
+		private readonly UserManager<ApplicationUser> _userManager;
 
-        public PredictionsController(IPandascoreApiService pandascoreApiService, EsportsPredictorContext context)
+        public PredictionsController(IPandascoreApiService pandascoreApiService, EsportsPredictorContext context, UserManager<ApplicationUser> userManager)
         {
 			_pandascoreApiService = pandascoreApiService;
 			_context = context;
+			_userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+		[Route("/{userId}/predictions")]
+        public async Task<IActionResult> Index(string? userId)
 		{
 			await UpdatePredictions();
+
 			var predictions = _context.Predictions
+				.Where(p => p.UserId == userId)
 				.Include(p => p.Match)
 				.Include(p => p.PredictedWinner)
 				.Include(p => p.ActualWinner)
 				.ToList();
 
 			return View(predictions);
+		}
+
+		public IActionResult RedirectToIndex()
+		{
+			string userId = _userManager.GetUserId(User);
+
+			return Redirect($"/{userId}/predictions");
 		}
 
 		[Route("/predictions/new/{matchSlug}")]
@@ -38,10 +53,21 @@ namespace EsportsPredictor.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(string winnerSlug, string matchSlug)
+		[Route("/{userId}/predictions/create")]
+		public async Task<IActionResult> Create(string winnerSlug, string matchSlug, string userId)
 		{
+			if(_userManager.GetUserId(User) != userId)
+			{
+				return BadRequest();
+			}
+
 			Match match;
 			Winner predictedWinner;
+
+			var user = _context.Users
+				.Where(user => user.Id == userId)
+				.Include(user => user.Predictions)
+				.First();
 
 			if (_context.Matches.Any(m => m.Slug == matchSlug))
 			{
@@ -61,26 +87,38 @@ namespace EsportsPredictor.Controllers
 				predictedWinner = new Winner(await _pandascoreApiService.GetTeamAsync(winnerSlug));
 			}
 			
-			Prediction prediction = new Prediction { IsCompleted = false, Match = match, PredictedWinner = predictedWinner };
-
+			Prediction prediction = new Prediction { IsCompleted = false, Match = match, PredictedWinner = predictedWinner, UserId = userId };
+			
+			user.Predictions.Add(prediction);
 			_context.Predictions.Add(prediction);
+			_context.Users.Update(user);
 			_context.SaveChanges();
 
-			return Redirect("/predictions");
+			return Redirect($"/{userId}/predictions");
 		}
 
 		[HttpPost]
-		[Route("/predictions/delete/{predictionId:int}")]
-		public IActionResult Delete(int predictionId)
+		[Route("/{userId}/predictions/delete/{predictionId:int}")]
+		public IActionResult Delete(string userId, int predictionId)
 		{
-			var predictionToDelete = _context.Predictions
+            if (_userManager.GetUserId(User) != userId)
+            {
+                return BadRequest();
+            }
+
+            var predictionToDelete = _context.Predictions
 				.Where(p => p.Id == predictionId)
 				.First();
+
+			if(_userManager.GetUserId(User) != predictionToDelete.UserId)
+			{
+				return BadRequest();
+			}
 
 			_context.Predictions.Remove(predictionToDelete);
 			_context.SaveChanges();
 
-			return Redirect("/predictions");
+			return Redirect($"/{userId}/predictions");
 		}
 
 		private async Task UpdatePredictions()

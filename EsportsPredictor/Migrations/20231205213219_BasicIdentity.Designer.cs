@@ -4,6 +4,7 @@ using EsportsPredictor.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EsportsPredictor.Migrations
 {
     [DbContext(typeof(EsportsPredictorContext))]
-    partial class EsportsPredictorContextModelSnapshot : ModelSnapshot
+    [Migration("20231205213219_BasicIdentity")]
+    partial class BasicIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,9 +142,6 @@ namespace EsportsPredictor.Migrations
                     b.Property<int?>("ActualWinnerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
@@ -152,15 +151,9 @@ namespace EsportsPredictor.Migrations
                     b.Property<int>("PredictedWinnerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ActualWinnerId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("MatchId");
 
@@ -341,10 +334,6 @@ namespace EsportsPredictor.Migrations
                         .WithMany()
                         .HasForeignKey("ActualWinnerId");
 
-                    b.HasOne("EsportsPredictor.Models.ApplicationUser", null)
-                        .WithMany("Predictions")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("EsportsPredictor.Models.Match", "Match")
                         .WithMany()
                         .HasForeignKey("MatchId")
@@ -413,11 +402,6 @@ namespace EsportsPredictor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EsportsPredictor.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Predictions");
                 });
 #pragma warning restore 612, 618
         }

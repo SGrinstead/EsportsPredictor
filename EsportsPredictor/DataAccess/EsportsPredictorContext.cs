@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using EsportsPredictor.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace EsportsPredictor.DataAccess
 {
-	public class EsportsPredictorContext : DbContext
+	public class EsportsPredictorContext : IdentityDbContext<ApplicationUser>
 	{
-		public DbSet<Prediction> Predictions { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<Prediction> Predictions { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<Winner> Winners { get; set; }
 
