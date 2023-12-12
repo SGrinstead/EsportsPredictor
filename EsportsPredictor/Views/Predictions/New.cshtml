@@ -1,11 +1,14 @@
 ﻿@model string
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> UserManager;
 @{
 	var opponents = ViewData["Opponents"] as TeamOpponents;
+	var userId = UserManager.GetUserId(User);
 }
 
 <h1>Make Your Prediction</h1>
 
-<form method="post" action="/predictions/create">
+<form method="post" action="/@userId/predictions/create">
 	<label for="winner">Select the team you think will win: </label>
 
 	<select name="winnerSlug" id="winner">

@@ -1,4 +1,9 @@
 ﻿@model List<Prediction>
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> UserManager;
+@{
+	var userId = UserManager.GetUserId(User);
+}
 
 <h1>Your Predictions</h1>
 
@@ -27,7 +32,7 @@
 			}
 			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
 			<td>
-				<form method="post" action="/predictions/delete/@prediction.Id">
+				<form method="post" action="/@userId/predictions/delete/@prediction.Id">
 					<button type="submit">Delete</button>
 				</form>
 			</td>
