@@ -9,9 +9,10 @@
 <h1>Make Your Prediction</h1>
 
 <form method="post" action="/@userId/predictions/create">
-	<label for="winner">Select the team you think will win: </label>
+	<label for="winner">Select who you think will win</label>
 
-	<select name="winnerSlug" id="winner">
+	<select class="form-select-sm" name="winnerSlug" id="winner">
+		<option value="" disabled selected>Choose a Team</option>
 		@foreach(var opponent in opponents.Opponents)
 		{
 			<option value="@opponent.Slug">@opponent.Name</option>
@@ -20,7 +21,7 @@
 
 	<input type="hidden" id="matchSlug" name="matchSlug" value="@Model"/>
 
-	<button type="submit">Make Prediction</button>
+	<button class="btn btn-success btn-lg" type="submit">Make Prediction</button>
 </form>
 
 @await Html.PartialAsync("_ReturnToMatchPartial")
