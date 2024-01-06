@@ -5,37 +5,49 @@
 	var userId = UserManager.GetUserId(User);
 }
 
-<h1>Your Predictions</h1>
+<h1 class="text-center">Your Predictions</h1><br />
 
-<table>
-	<tr>
-		<th>Match</th>
-		<th>Date</th>
-		<th>Status</th>
-		<th>Your Prediction</th>
-		<th>Result</th>
-	</tr>
-	@foreach(var prediction in Model)
-	{
+@if(Model.Count == 0)
+{
+	<div class="align-items-center justify-content-center text-center">
+		<h3>You have not made any predictions yet! Once you have, they will show up here.</h3>
+		<form method="get" action="/tournaments/">
+			<button class="btn btn-info btn-lg" type="submit">Find Upcoming Tournaments</button>
+		</form>
+	</div>
+}
+else
+{
+	<table class="table table-hover">
 		<tr>
-			<td>@prediction.Match.Name</td>
-			<td>@prediction.Match.GetLocalBeginAtString()</td>
-			<td>@prediction.Match.Status</td>
-			<td><a href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
-			@if(prediction.ActualWinner is null)
-			{
-				<td>Undetermined</td>
-			}
-			else
-			{
-				<td><a href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
-			}
-			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
-			<td>
-				<form method="post" action="/@userId/predictions/delete/@prediction.Id">
-					<button type="submit">Delete</button>
-				</form>
-			</td>
+			<th>Match</th>
+			<th>Date</th>
+			<th>Status</th>
+			<th>Your Prediction</th>
+			<th>Result</th>
 		</tr>
-	}
-</table>
+		@foreach (var prediction in Model)
+		{
+			<tr class="table-light">
+				<td>@prediction.Match.Name</td>
+				<td>@prediction.Match.GetLocalBeginAtString()</td>
+				<td>@prediction.Match.Status</td>
+				<td><a class="text-info" href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
+				@if (prediction.ActualWinner is null)
+				{
+					<td>Undetermined</td>
+				}
+				else
+				{
+					<td><a class="text-info" href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
+				}
+				<td><a class="text-info" href="/matches/@prediction.Match.Slug">Match Details</a></td>
+				<td>
+					<form method="post" action="/@userId/predictions/delete/@prediction.Id">
+						<button class="btn btn-danger" type="submit">Delete</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</table>
+}
