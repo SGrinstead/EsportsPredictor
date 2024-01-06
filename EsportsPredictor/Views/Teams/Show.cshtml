@@ -14,7 +14,7 @@ else
 	<ul>
 	@foreach(var player in Model.Players)
 	{
-		<li><a href="/players/@player.Slug">@player.Name</a></li>
+		<li><a class="text-info" href="/players/@player.Slug">@player.Name</a></li>
 	}
 	</ul>
 }

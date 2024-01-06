@@ -8,7 +8,7 @@
 	
 	<div class="row text-center">
 		<div class="col-5">
-			<h2>@team1.Name (<a href="/teams/@team1.Slug">@team1.Acronym</a>)</h2>
+			<h2>@team1.Name (<a class="text-info" href="/teams/@team1.Slug">@team1.Acronym</a>)</h2>
 			<img src="@team1.Image_url" alt="@team1.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
@@ -19,7 +19,7 @@
 					{
 						<span>@player.Role: </span>
 					}
-					<a href="/players/@player.Slug">@player.Name</a>
+					<a class="text-info" href="/players/@player.Slug">@player.Name</a>
 				</li>
 			}
 			</ul>
@@ -28,7 +28,7 @@
 			<h1>Vs</h1>
 		</div>
 		<div class="col-5">
-			<h2>@team2.Name (<a href="/teams/@team2.Slug">@team2.Acronym</a>)</h2>
+			<h2>@team2.Name (<a class="text-info" href="/teams/@team2.Slug">@team2.Acronym</a>)</h2>
 			<img src="@team2.Image_url" alt="@team2.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
@@ -39,7 +39,7 @@
 						{
 							<span>@player.Role: </span>
 						}
-						<a href="/players/@player.Slug">@player.Name</a>
+						<a class="text-info" href="/players/@player.Slug">@player.Name</a>
 					</li>
 				}
 			</ul>
@@ -56,7 +56,7 @@ else
 	{
 		<!--This case can happen if one team is TBD or there are more than 2 teams for some reason-->
 		<div class="text-center">
-			<h2>@team.Name (<a href="/teams/@team.Slug">@team.Acronym</a>)</h2>
+			<h2>@team.Name (<a class="text-info" href="/teams/@team.Slug">@team.Acronym</a>)</h2>
 			<img src="@team.Image_url" alt="@team.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
@@ -67,7 +67,7 @@ else
 						{
 							<span>@player.Role: </span>
 						}
-						<a href="/players/@player.Slug">@player.Name</a>
+						<a class="text-info" href="/players/@player.Slug">@player.Name</a>
 					</li>
 				}
 			</ul>
