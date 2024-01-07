@@ -1,22 +1,36 @@
 ﻿@model Team
-
-<h1>@Model.Name (@Model.Acronym)</h1>
-<img src="@Model.Image_url" alt="@Model.Name Logo"/>
-<h6>Location: @Model.Location</h6>
-
-<h3>Players</h3>
-@if (Model.Players.Count == 0)
-{
-	<p>No players found</p>
+@{
+	bool noPlayers = Model.Players.Count == 0;
 }
-else
-{
-	<ul>
-	@foreach(var player in Model.Players)
+
+<br />
+<div class="card w-50 mx-auto">
+	<h2 class="card-header">@Model.Name (@Model.Acronym)</h2>
+	<div class="card-body">
+		<img class="card-img-top" src="@Model.Image_url" alt="@Model.Name Logo" />
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">Players</h5>
+		@if (noPlayers)
+		{
+			<h6 class="card-subtitle text-muted">No player data available</h6>
+		}
+	</div>
+	@if (!noPlayers)
 	{
-		<li><a class="text-info" href="/players/@player.Slug">@player.Name</a></li>
+		<ul class="list-group list-group-flush">
+			@foreach (var player in Model.Players)
+			{
+				<li class="list-group-item">
+					<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+				</li>
+			}
+		</ul>
 	}
-	</ul>
-}
+	<div class="card-footer text-muted">
+		Location: @Model.Location
+	</div>
+</div>
+<br />
 
 @await Html.PartialAsync("_ReturnToMatchPartial")
