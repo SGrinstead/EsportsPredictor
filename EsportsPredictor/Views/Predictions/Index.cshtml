@@ -28,26 +28,49 @@ else
 		</tr>
 		@foreach (var prediction in Model)
 		{
-			<tr class="table-light">
+			string tableRowColor;
+			string linkColor;
+
+			if (prediction.ActualWinner is null)
+			{
+				tableRowColor = "table-light";
+				linkColor = "text-info";
+			}
+			else if (prediction.PredictedWinner == prediction.ActualWinner)
+			{
+				tableRowColor = "table-success";
+				linkColor = "text-light";
+			}
+			else
+			{
+				tableRowColor = "table-danger";
+				linkColor = "text-light";
+			}
+			<tr class="@tableRowColor">
 				<td>@prediction.Match.Name</td>
 				<td>@prediction.Match.GetLocalBeginAtString()</td>
-				<td>@prediction.Match.Status</td>
-				<td><a class="text-info" href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
+				<td>@prediction.Match.Status.Replace("_", " ")</td>
+				<td><strong><a class="@linkColor" href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a></strong> Wins</td>
 				@if (prediction.ActualWinner is null)
 				{
 					<td>Undetermined</td>
 				}
 				else
 				{
-					<td><a class="text-info" href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
+					<td><strong><a class="@linkColor" href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a></strong> Wins</td>
 				}
-				<td><a class="text-info" href="/matches/@prediction.Match.Slug">Match Details</a></td>
+				<td><strong><a class="@linkColor" href="/matches/@prediction.Match.Slug">Match Details</a></strong></td>
 				<td>
 					<form method="post" action="/@userId/predictions/delete/@prediction.Id">
-						<button class="btn btn-danger" type="submit">Delete</button>
+						<button class="btn btn-primary" type="submit">Delete</button>
 					</form>
 				</td>
 			</tr>
 		}
 	</table>
+	<div class="align-items-center justify-content-center text-center">
+		<form method="get" action="/tournaments/">
+			<button class="btn btn-info btn-lg" type="submit">Make Another Prediction</button>
+		</form>
+	</div>
 }
