@@ -4,8 +4,11 @@
 	var opponents = ViewData["Opponents"] as IOpponents;
 }
 
-<h1>@Model.GetLocalBeginAtString()</h1>
-<h1>@Model.Name</h1>
+<div class="text-center">
+	<h1>@Model.GetLocalBeginAtString()</h1>
+	<h1>@Model.Name</h1>
+</div>
+<br />
 
 <!--This uses partial views to display information about the match based on if the opponents are Players or Teams-->
 @if(opponents is null)
@@ -24,6 +27,7 @@ else
 {
 	<h6>Detailed Match Information Not Available</h6>
 }
+<br />
 
 <!--Button to make a prediction if the game hasn't started-->
 @if(DateTime.UtcNow < Model.Begin_at)
