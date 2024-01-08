@@ -12,16 +12,20 @@
 			<img src="@team1.Image_url" alt="@team1.Name Logo">
 			<h4>Players</h4>
 			<ul style="text-align:left">
-			@foreach(var player in team1.Players)
-			{
-				<li>
-					@if(player.Role is not null)
+				@foreach (var player in team1.Players)
+				{
+					if (player is not null)
 					{
-						<span>@player.Role: </span>
+						<li>
+							@if (player.Role is not null)
+							{
+								<span>@player.Role: </span>
+							}
+							<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+						</li>
 					}
-					<a class="text-info" href="/players/@player.Slug">@player.Name</a>
-				</li>
-			}
+
+				}
 			</ul>
 		</div>
 		<div class="col-2">
@@ -34,13 +38,16 @@
 			<ul style="text-align:left">
 				@foreach (var player in team2.Players)
 				{
-					<li>
-						@if (player.Role is not null)
-						{
-							<span>@player.Role: </span>
-						}
-						<a class="text-info" href="/players/@player.Slug">@player.Name</a>
-					</li>
+					if (player is not null)
+					{
+						<li>
+							@if (player.Role is not null)
+							{
+								<span>@player.Role: </span>
+							}
+							<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+						</li>
+					}
 				}
 			</ul>
 		</div>
@@ -62,13 +69,16 @@ else
 			<ul style="text-align:left">
 				@foreach (var player in team.Players)
 				{
-					<li>
-						@if (player.Role is not null)
-						{
-							<span>@player.Role: </span>
-						}
-						<a class="text-info" href="/players/@player.Slug">@player.Name</a>
-					</li>
+					if (player is not null)
+					{
+						<li>
+							@if (player.Role is not null)
+							{
+								<span>@player.Role: </span>
+							}
+							<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+						</li>
+					}
 				}
 			</ul>
 		</div>

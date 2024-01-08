@@ -7,7 +7,14 @@
 
 	<div class="row text-center">
 		<div class="col-5">
-			<h2>@player1.Name (<a class="text-info" href="/teams/@player1.Current_team.Slug">@player1.Current_team.Acronym</a>)</h2>
+			@if (player1.Current_team is not null)
+			{
+				<h2>@player1.Name (<a class="text-info" href="/teams/@player1.Current_team.Slug">@player1.Current_team.Acronym</a>)</h2>
+			}
+			else
+			{
+				<h2>@player1.Name</h2>
+			}
 			<img src="@player1.Image_url" alt="Picture of @player1.Name">
 			<a class="text-info" href="/players/@player1.Slug">More about @player1.Name</a>
 		</div>
@@ -15,7 +22,14 @@
 			<h1>Vs</h1>
 		</div>
 		<div class="col-5">
-			<h2>@player2.Name (<a class="text-info" href="/teams/@player2.Current_team.Slug">@player2.Current_team.Acronym</a>)</h2>
+			@if (player2.Current_team is not null)
+			{
+				<h2>@player2.Name (<a class="text-info" href="/teams/@player2.Current_team.Slug">@player2.Current_team.Acronym</a>)</h2>
+			}
+			else
+			{
+				<h2>@player2.Name</h2>
+			}
 			<img src="@player2.Image_url" alt="Picture of @player2.Name">
 			<a class="text-info" href="/players/@player2.Slug">More about @player2.Name</a>
 		</div>
@@ -30,7 +44,14 @@ else
 	foreach (var player in Model.Opponents)
 	{
 		<div class="text-center">
-			<h2>@player.Name (<a class="text-info" href="/teams/@player.Current_team.Slug">@player.Current_team.Acronym</a>)</h2>
+			@if (player.Current_team is not null)
+			{
+				<h2>@player.Name (<a class="text-info" href="/teams/@player.Current_team.Slug">@player.Current_team.Acronym</a>)</h2>
+			}
+			else
+			{
+				<h2>@player.Name</h2>
+			}
 			<img src="@player.Image_url" alt="Picture of @player.Name">
 			<a class="text-info" href="/players/@player.Slug">More about @player.Name</a>
 		</div>

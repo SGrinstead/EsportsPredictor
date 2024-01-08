@@ -4,7 +4,14 @@
 <img src="@Model.Image_url" alt="Picture of @Model.Name"/>
 
 <h6>Nationality: @Model.Nationality</h6>
-<p>Currently plays @Model.Current_videogame.Name for <a class="text-info" href="/teams/@Model.Current_team.Slug">@Model.Current_team.Name</a></p>
+@if (Model.Current_team is not null)
+{
+	<p>Currently plays @Model.Current_videogame.Name for <a class="text-info" href="/teams/@Model.Current_team.Slug">@Model.Current_team.Name</a></p>
+}
+else
+{
+	<p>Currently plays @Model.Current_videogame.Name</p>
+}
 
 @if(Model.Role is not null)
 {
