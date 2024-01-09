@@ -5,55 +5,67 @@
 	Player player1 = Model.Opponents[0];
 	Player player2 = Model.Opponents[1];
 
-	<div class="row text-center">
-		<div class="col-5">
+	<div class="row">
+		<div class="col-12 col-md-5 card">
 			@if (player1.Current_team is not null)
 			{
-				<h2>@player1.Name (<a class="text-info" href="/teams/@player1.Current_team.Slug">@player1.Current_team.Acronym</a>)</h2>
+				<h2 class="card-header">@player1.Name (<a class="text-info" href="/teams/@player1.Current_team.Slug">@player1.Current_team.Acronym</a>)</h2>
 			}
 			else
 			{
-				<h2>@player1.Name</h2>
+				<h2 class="card-header">@player1.Name</h2>
 			}
-			<img src="@player1.Image_url" alt="Picture of @player1.Name">
-			<a class="text-info" href="/players/@player1.Slug">More about @player1.Name</a>
+			<div class="card-body">
+				<img class="card-img-top" src="@player1.Image_url" alt="Picture of @player1.Name">
+			</div>
+			<div class="card-footer">
+				<a class="text-info" href="/players/@player1.Slug">More about @player1.Name</a>
+			</div>
 		</div>
-		<div class="col-2">
+		<div class="col-12 col-md-2 text-center">
 			<h1>Vs</h1>
 		</div>
-		<div class="col-5">
+		<div class="col-12 col-md-5 card">
 			@if (player2.Current_team is not null)
 			{
-				<h2>@player2.Name (<a class="text-info" href="/teams/@player2.Current_team.Slug">@player2.Current_team.Acronym</a>)</h2>
+				<h2 class="card-header">@player2.Name (<a class="text-info" href="/teams/@player2.Current_team.Slug">@player2.Current_team.Acronym</a>)</h2>
 			}
 			else
 			{
-				<h2>@player2.Name</h2>
+				<h2 class="card-header">@player2.Name</h2>
 			}
-			<img src="@player2.Image_url" alt="Picture of @player2.Name">
-			<a class="text-info" href="/players/@player2.Slug">More about @player2.Name</a>
+			<div class="card-body">
+				<img class="card-img-top" src="@player2.Image_url" alt="Picture of @player2.Name">
+			</div>
+			<div class="card-footer">
+				<a class="text-info" href="/players/@player2.Slug">More about @player2.Name</a>
+			</div>
 		</div>
 	</div>
 }
 else if (Model.Opponents.Count == 0)
 {
-	<h4>Player Data Not Available</h4>
+	<h4 class="text-center">Player Data Not Available</h4>
 }
 else
 {
 	foreach (var player in Model.Opponents)
 	{
-		<div class="text-center">
+		<div class="card w-50 mx-auto">
 			@if (player.Current_team is not null)
 			{
-				<h2>@player.Name (<a class="text-info" href="/teams/@player.Current_team.Slug">@player.Current_team.Acronym</a>)</h2>
+				<h2 class="card-header">@player.Name (<a class="text-info" href="/teams/@player.Current_team.Slug">@player.Current_team.Acronym</a>)</h2>
 			}
 			else
 			{
-				<h2>@player.Name</h2>
+				<h2 class="card-header">@player.Name</h2>
 			}
-			<img src="@player.Image_url" alt="Picture of @player.Name">
-			<a class="text-info" href="/players/@player.Slug">More about @player.Name</a>
+			<div class="card-body">
+				<img class="card-img-top" src="@player.Image_url" alt="Picture of @player.Name">
+			</div>
+			<div class="card-footer">
+				<a class="text-info" href="/players/@player.Slug">More about @player.Name</a>
+			</div>
 		</div>
 	}
 }
