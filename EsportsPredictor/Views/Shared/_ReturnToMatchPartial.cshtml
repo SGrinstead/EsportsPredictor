@@ -1,6 +1,8 @@
 ﻿@if (Context.Request.Cookies.ContainsKey("RecentlyViewedMatch"))
 {
-	<form method="get" action="/matches/@Context.Request.Cookies["RecentlyViewedMatch"]">
-		<button type="submit">Return to Match</button>
-	</form>
+	<div class="d-flex align-items-center justify-content-center">
+		<form method="get" action="/matches/@Context.Request.Cookies["RecentlyViewedMatch"]">
+			<button class="btn btn-info btn-lg" type="submit">Return to Match</button>
+		</form>
+	</div>
 }

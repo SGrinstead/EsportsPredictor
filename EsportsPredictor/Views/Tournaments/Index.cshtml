@@ -1,18 +1,33 @@
 ﻿@model List<Videogame>
 
-<h1>Tournaments</h1>
-<form method="get" action="/tournaments/upcoming">
-	<label for="game">Choose a VideoGame:</label>
+<div class="text-center">
+	<br />
+	<h1>Tournaments</h1>
+	<br />
+	<div class="d-flex align-items-center justify-content-center">
+		<form method="get" action="/tournaments/upcoming">
+			<strong><label for="game">Filter by Game</label></strong>
 
-	<select name="game" id="game">
-		@foreach(var game in Model)
-		{
-			<option value="@game.Slug">@game.Name</option>
-		}
-	</select>
+			<select class="form-select" name="game" id="game">
+				<option value="" disabled selected>Choose a Video Game</option>
+				@foreach (var game in Model)
+				{
+					<option value="@game.Slug">@game.Name</option>
+				}
+			</select>
 
-	<button type="submit">Find Tournaments</button>
-</form>
+			<br />
+			<button class="btn btn-info" type="submit">Find Tournaments</button>
+		</form>
+	</div>
+</div>
+<br />
+<br />
 
-<h3>All</h3>
-<a href="/tournaments/upcoming">temp link</a>
+<div>
+	<h3 class="text-center">All Upcoming Tournaments</h3>
+	<br />
+	<form class="d-flex align-items-center justify-content-center" method="get" action="/tournaments/upcoming">
+		<button class="btn btn-info" type="submit">See All Tournaments</button>	
+	</form>
+</div>

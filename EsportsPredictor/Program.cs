@@ -18,13 +18,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IPandascoreApiService, PandascoreApiService>();
-//builder.Services.AddDbContext<EsportsPredictorContext>(
-//    options => options.UseNpgsql(
-//        builder.Configuration["DbConnectionString"]
-//        ?? throw new InvalidOperationException("Database connection string not found")
-//        )
-//    .UseSnakeCaseNamingConvention()
-//);
 
 var app = builder.Build();
 

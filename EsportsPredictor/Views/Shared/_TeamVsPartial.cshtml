@@ -6,43 +6,71 @@
 	Team team1 = Model.Opponents[0];
 	Team team2 = Model.Opponents[1];
 	
-	<div class="row text-center">
-		<div class="col-5">
-			<h2>@team1.Name (<a href="/teams/@team1.Slug">@team1.Acronym</a>)</h2>
-			<img src="@team1.Image_url" alt="@team1.Name Logo">
-			<h4>Players</h4>
-			<ul style="text-align:left">
-			@foreach(var player in team1.Players)
+	<div class="row">
+		<div class="col-12 col-md-5 card">
+			<h2 class="card-header">@team1.Name (<a class="text-info" href="/teams/@team1.Slug">@team1.Acronym</a>)</h2>
+			<div class="card-body">
+				<img class="card-img-top" src="@team1.Image_url" alt="@team1.Name Logo">
+			</div>
+			<div class="p-3">
+				<h5 class="card-title">Players</h5>
+				@if (team1.NoPlayers())
+				{
+					<h6 class ="card-subtitle text-muted">No player data available</h6>
+				}
+			</div>
+			@if (!team1.NoPlayers())
 			{
-				<li>
-					@if(player.Role is not null)
+				<ul class="list-group list-group-flush">
+					@foreach (var player in team1.Players)
 					{
-						<span>@player.Role: </span>
+						if (player is not null)
+						{
+							<li class="list-group-item">
+								@if (player.Role is not null)
+								{
+									<span>@player.Role: </span>
+								}
+								<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+							</li>
+						}
 					}
-					<a href="/players/@player.Slug">@player.Name</a>
-				</li>
+				</ul>
 			}
-			</ul>
 		</div>
-		<div class="col-2">
+		<div class="col-12 col-md-2 text-center">
 			<h1>Vs</h1>
 		</div>
-		<div class="col-5">
-			<h2>@team2.Name (<a href="/teams/@team2.Slug">@team2.Acronym</a>)</h2>
-			<img src="@team2.Image_url" alt="@team2.Name Logo">
-			<h4>Players</h4>
-			<ul style="text-align:left">
-				@foreach (var player in team2.Players)
+		<div class="col-12 col-md-5 card mx-auto">
+			<h2 class="card-header">@team2.Name (<a class="text-info" href="/teams/@team2.Slug">@team2.Acronym</a>)</h2>
+			<div class="card-body">
+				<img class="card-img-top" src="@team2.Image_url" alt="@team2.Name Logo">
+			</div>
+			<div class="p-3">
+				<h5 class="card-title">Players</h5>
+				@if (team2.NoPlayers())
 				{
-					<li>
-						@if (player.Role is not null)
-						{
-							<span>@player.Role: </span>
-						}
-						<a href="/players/@player.Slug">@player.Name</a>
-					</li>
+					<h6 class="card-subtitle text-muted">No player data available</h6>
 				}
-			</ul>
+			</div>
+			@if (!team2.NoPlayers())
+			{
+				<ul class="list-group list-group-flush">
+					@foreach (var player in team2.Players)
+					{
+						if (player is not null)
+						{
+							<li class="list-group-item">
+								@if (player.Role is not null)
+								{
+									<span>@player.Role: </span>
+								}
+								<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+							</li>
+						}
+					}
+				</ul>
+			}
 		</div>
 	</div>
 }
@@ -55,22 +83,36 @@ else
 	foreach(var team in Model.Opponents)
 	{
 		<!--This case can happen if one team is TBD or there are more than 2 teams for some reason-->
-		<div class="text-center">
-			<h2>@team.Name (<a href="/teams/@team.Slug">@team.Acronym</a>)</h2>
-			<img src="@team.Image_url" alt="@team.Name Logo">
-			<h4>Players</h4>
-			<ul style="text-align:left">
-				@foreach (var player in team.Players)
+		<div class="card w-50 mx-auto">
+			<h2 class="card-header">@team.Name (<a class="text-info" href="/teams/@team.Slug">@team.Acronym</a>)</h2>
+			<div class="card-body">
+				<img class="card-img-top" src="@team.Image_url" alt="@team.Name Logo">
+			</div>
+			<div class="card-body">
+				<h5 class="card-title">Players</h5>
+				@if (team.NoPlayers())
 				{
-					<li>
-						@if (player.Role is not null)
-						{
-							<span>@player.Role: </span>
-						}
-						<a href="/players/@player.Slug">@player.Name</a>
-					</li>
+					<h6 class="card-subtitle text-muted">No player data available</h6>
 				}
-			</ul>
+			</div>
+			@if (!team.NoPlayers())
+			{
+				<ul class="list-group list-group-flush">
+					@foreach (var player in team.Players)
+					{
+						if (player is not null)
+						{
+							<li class="list-group-item">
+								@if (player.Role is not null)
+								{
+									<span>@player.Role: </span>
+								}
+								<a class="text-info" href="/players/@player.Slug">@player.Name</a>
+							</li>
+						}
+					}
+				</ul>
+			}
 		</div>
 	}
 }

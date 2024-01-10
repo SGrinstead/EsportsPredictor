@@ -1,14 +1,31 @@
 ﻿@model Player
 
-<h1>@Model.First_name "@Model.Name" @Model.Last_name</h1>
-<img src="@Model.Image_url" alt="Picture of @Model.Name"/>
-
-<h6>Nationality: @Model.Nationality</h6>
-<p>Currently plays @Model.Current_videogame.Name for <a href="/teams/@Model.Current_team.Slug">@Model.Current_team.Name</a></p>
-
-@if(Model.Role is not null)
-{
-	<h6>Role: @Model.Role</h6>
-}
+<br />
+<div class="card w-50 mx-auto">
+	<h2 class="card-header">@Model.First_name "@Model.Name" @Model.Last_name</h2>
+	<div class="card-body">
+		<img class="card-img-top" src="@Model.Image_url" alt="Picture of @Model.Name" />
+	</div>
+	<div class="card-body">
+		@if (Model.Current_team is not null)
+		{
+			<p class="card-text">Currently plays @Model.Current_videogame.Name for <a class="text-info" href="/teams/@Model.Current_team.Slug">@Model.Current_team.Name</a></p>
+		}
+		else
+		{
+			<p class="card-text">Currently plays @Model.Current_videogame.Name</p>
+		}
+	</div>
+	@if (Model.Role is not null)
+	{
+		<div class="card-body">
+			<p class="card-text">Role: @Model.Role</p>
+		</div>
+	}
+	<div class="card-footer text-muted">
+		Nationality: @Model.Nationality
+	</div>
+</div>
+<br />
 
 @await Html.PartialAsync("_ReturnToMatchPartial")

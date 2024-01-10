@@ -5,37 +5,73 @@
 	var userId = UserManager.GetUserId(User);
 }
 
-<h1>Your Predictions</h1>
+<br />
+<h1 class="text-center">Your Predictions</h1><br />
 
-<table>
-	<tr>
-		<th>Match</th>
-		<th>Date</th>
-		<th>Status</th>
-		<th>Your Prediction</th>
-		<th>Result</th>
-	</tr>
-	@foreach(var prediction in Model)
-	{
+@if(Model.Count == 0)
+{
+	<div class="align-items-center justify-content-center text-center">
+		<h3>You have not made any predictions yet! Once you have, they will show up here.</h3>
+		<form method="get" action="/tournaments/">
+			<button class="btn btn-info btn-lg" type="submit">Find Upcoming Tournaments</button>
+		</form>
+	</div>
+}
+else
+{
+	<table class="table table-hover">
 		<tr>
-			<td>@prediction.Match.Name</td>
-			<td>@prediction.Match.GetLocalBeginAtString()</td>
-			<td>@prediction.Match.Status</td>
-			<td><a href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a> Wins</td>
-			@if(prediction.ActualWinner is null)
+			<th>Match</th>
+			<th>Date</th>
+			<th>Status</th>
+			<th>Your Prediction</th>
+			<th>Result</th>
+		</tr>
+		@foreach (var prediction in Model)
+		{
+			string tableRowColor;
+			string linkColor;
+
+			if (prediction.ActualWinner is null)
 			{
-				<td>Undetermined</td>
+				tableRowColor = "table-light";
+				linkColor = "text-info";
+			}
+			else if (prediction.PredictedWinner == prediction.ActualWinner)
+			{
+				tableRowColor = "table-success";
+				linkColor = "text-light";
 			}
 			else
 			{
-				<td><a href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a> Wins</td>
+				tableRowColor = "table-danger";
+				linkColor = "text-light";
 			}
-			<td><a href="/matches/@prediction.Match.Slug">Match Details</a></td>
-			<td>
-				<form method="post" action="/@userId/predictions/delete/@prediction.Id">
-					<button type="submit">Delete</button>
-				</form>
-			</td>
-		</tr>
-	}
-</table>
+			<tr class="@tableRowColor">
+				<td>@prediction.Match.Name</td>
+				<td>@prediction.Match.GetLocalBeginAtString()</td>
+				<td>@prediction.Match.Status.Replace("_", " ")</td>
+				<td><strong><a class="@linkColor" href="@prediction.PredictedWinner.DetailsPageUrl">@prediction.PredictedWinner.Name</a></strong> Wins</td>
+				@if (prediction.ActualWinner is null)
+				{
+					<td>Undetermined</td>
+				}
+				else
+				{
+					<td><strong><a class="@linkColor" href="@prediction.ActualWinner.DetailsPageUrl">@prediction.ActualWinner.Name</a></strong> Wins</td>
+				}
+				<td><strong><a class="@linkColor" href="/matches/@prediction.Match.Slug">Match Details</a></strong></td>
+				<td>
+					<form method="post" action="/@userId/predictions/delete/@prediction.Id">
+						<button class="btn btn-primary" type="submit">Delete</button>
+					</form>
+				</td>
+			</tr>
+		}
+	</table>
+	<div class="align-items-center justify-content-center text-center">
+		<form method="get" action="/tournaments/">
+			<button class="btn btn-info btn-lg" type="submit">Make Another Prediction</button>
+		</form>
+	</div>
+}
