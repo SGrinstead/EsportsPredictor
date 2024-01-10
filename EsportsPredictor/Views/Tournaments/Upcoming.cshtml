@@ -1,6 +1,8 @@
 ﻿@model List<Tournament>
 
-<h1>Upcoming Tournaments</h1>
+<br />
+<h1 class="text-center">Upcoming Tournaments</h1>
+<br />
 
 @if(Model.Count == 0)
 {
@@ -18,7 +20,7 @@ else
 		@foreach(var t in Model)
 		{
 			<tr class="table-light">
-				<td>@t.League.Name @t.Name</td>
+				<td>@t.Videogame.Name: @t.League.Name @t.Name</td>
 				<td>@t.GetLocalBeginAtString()</td>
 				<td>@t.GetLocalEndAtString()</td>
 				<td>@t.Tier.ToUpper()</td>

@@ -5,24 +5,29 @@
 	var opponents = ViewData["Opponents"] as TeamOpponents;
 	var userId = UserManager.GetUserId(User);
 }
+<br />
+<h1 class="text-center">Make Your Prediction</h1>
+<br />
 
-<h1>Make Your Prediction</h1>
+<div class="d-flex align-items-center justify-content-center text-center">
+	<form method="post" action="/@userId/predictions/create">
+		<strong><label for="winner">Select who you think will win</label></strong>
 
-<form method="post" action="/@userId/predictions/create">
-	<label for="winner">Select who you think will win</label>
+		<select class="form-select" name="winnerSlug" id="winner">
+			<option value="" disabled selected>Choose a Team</option>
+			@foreach (var opponent in opponents.Opponents)
+			{
+				<option value="@opponent.Slug">@opponent.Name</option>
+			}
+		</select>
+		<br />
 
-	<select class="form-select-sm" name="winnerSlug" id="winner">
-		<option value="" disabled selected>Choose a Team</option>
-		@foreach(var opponent in opponents.Opponents)
-		{
-			<option value="@opponent.Slug">@opponent.Name</option>
-		}
-	</select>
+		<input type="hidden" id="matchSlug" name="matchSlug" value="@Model" />
 
-	<input type="hidden" id="matchSlug" name="matchSlug" value="@Model"/>
-
-	<button class="btn btn-success btn-lg" type="submit">Make Prediction</button>
-</form>
+		<button class="btn btn-success btn-lg" type="submit">Make Prediction</button>
+	</form>
+</div>
+<br />
 
 @await Html.PartialAsync("_ReturnToMatchPartial")
 
